@@ -36,11 +36,13 @@ canvas.addEventListener("mousemove", ({ clientX, clientY }) => {
     }
 })
 canvas.addEventListener("mouseup", ({ clientX, clientY }) => {
-    if (isPainting) {
-        draw(clientX, clientY)
+    if (activeTool == "brush") { // Verificar se a ferramenta ativa é o pincel
+        draw(clientX, clientY);
     }
     isPainting = false
+    canvas.removeEventListener("mousemove", onMouseMove);
 })
+
 
 
 const draw = (x, y) => {
@@ -76,6 +78,17 @@ const selectTool = ({ target }) => {
         selectedTool.classList.add("active")
     }
 
+}
+canvas.addEventListener("mousemove", onMouseMove);
+function onMouseMove({ clientX, clientY }) {
+    if (isPainting) {
+        if (activeTool == "brush") {
+            draw(clientX, clientY);
+        }
+        if (activeTool == "rubber") {
+            erase(clientX, clientY);
+        }
+    }
 }
 const selectSize = ({ target }) => {
     const selectedTool = target.closest("button")
